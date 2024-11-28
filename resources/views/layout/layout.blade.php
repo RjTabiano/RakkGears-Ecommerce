@@ -89,7 +89,7 @@
                                     <a href="{{route('home')}}">Home</a>
                                 </li>
                                 <li class="menu-item-has-children">
-                                    <a href="product-details.html">product</a>
+                                    <a href="{{route('product_list')}}">product</a>
                                 </li>
                                 <li class="menu-item-has-children">
                                     <a href="#">pages </a>
