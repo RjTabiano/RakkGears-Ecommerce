@@ -147,7 +147,7 @@ a, button, img, input, span {
 }
 
 a:focus {
-  color: inherit;
+  color: EB3336;
   outline: none;
   text-decoration: none;
 }
@@ -1472,8 +1472,8 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
   border-radius: 50%;
 }
 .cart_remove a:hover {
-  background: #1D1678;
-  border-color: #1D1678;
+  background: #EB3336;
+  border-color: #EB3336;
   color: #ffffff;
 }
 
@@ -1528,8 +1528,8 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
   border: 1px solid #ebebeb;
 }
 .cart_button a:hover {
-  background: #1D1678;
-  border-color: #1D1678;
+  background: #EB3336;
+  border-color: #000000;
   color: #fff;
 }
 
@@ -1652,7 +1652,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
   font-size: 13px;
 }
 .main_menu nav > ul > li ul.sub_menu li a:hover {
-  color: #1D1678;
+  color: #EB3336;
 }
 .main_menu nav > ul > li.mega_items {
   position: static;
@@ -2197,7 +2197,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 }
 
 .categories_menu_toggle ul li.has-sub ul.categorie_sub li a:hover {
-  color: #1D1678;
+  color: #EB3336;
 }
 
 .categories_menu_toggle ul li.has-sub {
@@ -2878,7 +2878,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
   margin-bottom: 0;
 }
 .product_content h3 a:hover {
-  color: #1D1678;
+  color: #EB3336;
 }
 
 .action_links {
@@ -6156,7 +6156,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
   border: 0;
   font-size: 16px;
   margin-left: 20px;
-  background: #1D1678;
+  background: #EB3336;
   height: 42px;
   line-height: 42px;
   text-transform: capitalize;
@@ -6179,7 +6179,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
   }
 }
 .product_variant.quantity button:hover {
-  background: #3E444A;
+  background: #DF1619;
 }
 .product_variant.color {
   margin-bottom: 26px;
@@ -7006,7 +7006,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
   color: #ffffff;
   line-height: 36px;
   padding: 5px 15px;
-  background: #FA5252;
+  background: #EB3336;
   text-transform: uppercase;
   font-size: 16px;
   font-weight: 600;
@@ -7161,7 +7161,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
   border-radius: 3px;
 }
 .form_group button:hover {
-  background: #1D1678;
+  background: #EB3336;
 }
 
 .form_group input[type="checkbox"] {

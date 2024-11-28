@@ -591,7 +591,7 @@ section.shipping_area {
 }
 
 .table-responsive table thead {
-    background: #FA5252;
+    background: #EB3336;
 }
 
 .card-body1 a {
@@ -782,7 +782,7 @@ section.shipping_area {
 .pro-details-feature a {
     border: 0;
     font-size: 16px;
-    background: #1D1678;
+    background: #EB3336;
     height: 42px;
     line-height: 42px;
     text-transform: capitalize;
