@@ -3,7 +3,7 @@
 @section('content')
 
 
-    <div class="container-fluid pt-4 px-4">
+<div class="container-fluid pt-4 px-4">
     <div class="bg-secondary text-center rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">
             <h6 class="mb-0">Orders</h6>
@@ -11,17 +11,17 @@
     <button class="btn btn-sm btn-light dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
         Filter
     </button>
-    <ul class="dropdown-menu" aria-labelledby="filterDropdown">
-        <li><a class="dropdown-item small {{ $status == 'pending' ? 'active' : '' }}" href="?status=pending">Pending</a></li>
-        <li><a class="dropdown-item small {{ $status == 'processing' ? 'active' : '' }}" href="?status=processing">Processing</a></li>
-        <li><a class="dropdown-item small {{ $status == 'completed' ? 'active' : '' }}" href="?status=completed">Completed</a></li>
-        <li><a class="dropdown-item small {{ $status == 'cancelled' ? 'active' : '' }}" href="?status=cancelled">Cancelled</a></li>
-        <li><a class="dropdown-item small" href="{{ route('orders') }}">Clear Filter</a></li>
-    </ul>
-</div>
+        <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+            <li><a class="dropdown-item small {{ $status == 'pending' ? 'active' : '' }}" href="?status=pending">Pending</a></li>
+            <li><a class="dropdown-item small {{ $status == 'processing' ? 'active' : '' }}" href="?status=processing">Processing</a></li>
+            <li><a class="dropdown-item small {{ $status == 'completed' ? 'active' : '' }}" href="?status=completed">Completed</a></li>
+            <li><a class="dropdown-item small {{ $status == 'cancelled' ? 'active' : '' }}" href="?status=cancelled">Cancelled</a></li>
+            <li><a class="dropdown-item small" href="{{ route('orders') }}">Clear Filter</a></li>
+        </ul>
         </div>
+    </div>
         <div class="table-responsive">
-            <table class="table text-start align-middle table-bordered table-hover mb-0">
+            <table class="table text-start align-middle table-bordered table-hover mb-3">
                 <thead>
                     <tr class="text-white">
                         <th scope="col">Order #</th>
@@ -53,7 +53,6 @@
                             </button>
                         </td>
                         <td>
-                            <!-- Status-specific actions -->
                             @if($order->status == 'pending')
                                 <a class="btn btn-sm btn-success" href="{{ route('orders.confirm', $order->id) }}">Confirm</a>
                             @elseif($order->status == 'processing')
@@ -66,6 +65,11 @@
                     @endforeach
                 </tbody>
             </table>
+<div class="d-flex justify-content-end">
+    {{ $orders->appends(['status' => request()->query('status')])->links('pagination::bootstrap-4') }}
+</div>
+
+
         </div>
     </div>
 </div>
@@ -131,5 +135,48 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+
+<style>
+/* Make pagination links transparent with minimalistic style */
+.pagination {
+    background-color: transparent !important;
+    border: none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 20px;
+    padding: 0;
+}
+
+.pagination a,
+.pagination .page-link {
+    background-color: transparent !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    color: #fff !important;
+    padding: 5px 10px;
+    margin: 0 5px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+.pagination .page-item.active .page-link {
+    color: #EB1616 !important;
+}
+
+.pagination .page-item:hover .page-link,
+.pagination .page-item:focus-within .page-link {
+    background-color: rgba(255, 0, 0, 0.1) !important; /* Red hover */
+    color: red !important;
+    border-color: rgba(255, 0, 0, 0.2) !important;
+}
+
+.pagination .page-link:focus {
+    box-shadow: none;
+}
+
+</style>
+
+
 @endsection
 @endsection

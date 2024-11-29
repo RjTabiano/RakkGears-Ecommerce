@@ -15,7 +15,7 @@
         <li><a class="dropdown-item small {{ $category == 'keyboard' ? 'active' : '' }}" href="?category=keyboard">Keyboard</a></li>
         <li><a class="dropdown-item small {{ $category == 'headset' ? 'active' : '' }}" href="?category=headset">Headset</a></li>
         <li><a class="dropdown-item small {{ $category == 'pc_case' ? 'active' : '' }}" href="?category=pc_case">PC Case</a></li>
-        <li><a class="dropdown-item small" href="{{ route('orders') }}">Clear Filter</a></li>
+        <li><a class="dropdown-item small" href="{{ route('products') }}">Clear Filter</a></li>
     </ul>
 </div>
         </div>
@@ -61,6 +61,10 @@
                     @endforeach
                 </tbody>
             </table>
+            <div class="d-flex justify-content-end mt-3">
+                {{ $products->appends(['category' => request()->query('category')])->links('pagination::bootstrap-4') }}
+            </div>
+
         </div>
     </div>
 </div>
@@ -117,6 +121,8 @@
         </div>
     </div>
 </div>
+
+@section('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
     const productDetailModal = document.getElementById('productDetailModal');
@@ -157,4 +163,45 @@
     });
 });
 </script>
+<style>
+/* Make pagination links transparent with minimalistic style */
+.pagination {
+    background-color: transparent !important;
+    border: none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 20px;
+    padding: 0;
+}
+
+.pagination a,
+.pagination .page-link {
+    background-color: transparent !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    color: #fff !important;
+    padding: 5px 10px;
+    margin: 0 5px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+.pagination .page-item.active .page-link {
+    color: #EB1616 !important;
+}
+
+.pagination .page-item:hover .page-link,
+.pagination .page-item:focus-within .page-link {
+    background-color: rgba(255, 0, 0, 0.1) !important; /* Red hover */
+    color: red !important;
+    border-color: rgba(255, 0, 0, 0.2) !important;
+}
+
+.pagination .page-link:focus {
+    box-shadow: none;
+}
+
+</style>
+@endsection
 @endsection

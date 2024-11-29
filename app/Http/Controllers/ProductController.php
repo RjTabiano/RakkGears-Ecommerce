@@ -16,11 +16,10 @@ class ProductController extends Controller
 
         $category = $request->query('category');
 
-        if ($category) {
-            $products = Product::where('category', $category)->get();
-        } else {
-            $products = Product::all();
-        }
+        $products = Product::when($category, function ($query, $category) {
+        $query->where('category', $category);
+            })->paginate(10); 
+            
         return view('admin_panel.productsList', ['products' => $products, 'category' => $category]);
     }
 

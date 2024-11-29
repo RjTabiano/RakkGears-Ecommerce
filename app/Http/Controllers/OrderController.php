@@ -14,7 +14,7 @@ class OrderController extends Controller
 
         $orders = Order::when($status, function ($query, $status) {
             $query->where('status', $status);
-        })->get();
+        })->paginate(10);
 
         foreach ($orders as $order) {
             $order->billing_details = json_decode($order->billing_details, true);
