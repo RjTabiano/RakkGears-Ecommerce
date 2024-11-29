@@ -58,14 +58,16 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         @if(session('success'))
-            // Show the toast
             const toastElement = document.getElementById('toastMessage');
-            const toast = new bootstrap.Toast(toastElement);
+            const toast = new bootstrap.Toast(toastElement, {
+                delay: 500 
+            });
             toastElement.querySelector('.toast-body').textContent = "{{ session('success') }}";
             toast.show();
         @endif
     });
 </script>
+
 
 
 @endsection

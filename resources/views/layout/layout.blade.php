@@ -49,9 +49,9 @@
                             </ul>
                         </div> 
                         <div class="search_container">
-                           <form action="#">
+                           <form action="{{ route('product_list') }}">
                                 <div class="search_box">
-                                    <input placeholder="Search product..." type="text">
+                                    <input placeholder="Search product..." type="text" value="{{ request()->query('search') }}">
                                     <button type="submit">Search</button> 
                                 </div>
                             </form>
@@ -154,9 +154,9 @@
                         <div class="col-lg-9 col-md-6">
                             <div class="middel_right">
                                 <div class="search_container">
-                                   <form action="#">
+                                   <form action="{{ route('product_list') }}">
                                         <div class="search_box">
-                                            <input placeholder="Search product..." type="text" style="width: 60%; border-bottom: 2px solid #242424;">
+                                            <input placeholder="Search product..." type="text" style="width: 60%; border-bottom: 2px solid #242424;" value="{{ request()->query('search') }}">
                                             <button type="submit">Search</button> 
                                         </div>
                                     </form>

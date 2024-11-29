@@ -34,12 +34,21 @@ class HomeController extends Controller
     public function product_list(Request $request)
     {
         $categories = $request->query('categories', []); // Get selected categories as an array
+        $searchTerm = $request->query('search'); // Get the search term from the query string
 
+        $query = Product::query();
+
+        // Filter products by category if categories are selected
         if (!empty($categories)) {
-            $products = Product::whereIn('category', $categories)->get();
-        } else {
-            $products = Product::all();
+            $query->whereIn('category', $categories);
         }
+
+        // Filter products by search term if provided
+        if ($searchTerm) {
+            $query->where('name', 'like', '%' . $searchTerm . '%');
+        }
+
+        $products = $query->get(); // Execute the query
 
         // Get all categories for the sidebar dynamically (assumes Product has a 'category' column)
         $allCategories = Product::select('category')
@@ -55,6 +64,7 @@ class HomeController extends Controller
             'selectedCategories' => $categories,
         ]);
     }
+
 
 
     public function tracking()
