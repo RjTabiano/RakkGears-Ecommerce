@@ -11,7 +11,7 @@
                     <div id="img-1" class="zoomWrapper single-zoom">
                         <a href="#">
                             <!-- Use the product image from the database -->
-                            <img id="zoom1" src="{{ Storage::url($product->image_path) }}" data-zoom-image="{{ Storage::url($product->image_path) }}" alt="big-1">
+                            <img id="zoom1" src="{{ asset('public/storage/' . $product->image_path) }}" data-zoom-image="{{ Storage::url($product->image_path) }}" alt="big-1">
                         </a>
                     </div>
                     <div class="single-zoom-thumb">
@@ -26,12 +26,18 @@
                         <h1>{{ $product->name }}</h1>
                         <div class="product_ratting">
                             <ul>
-                                <!-- You can dynamically show the rating based on product reviews -->
                                 @for ($i = 1; $i <= 5; $i++)
-                                    <li><a href="#"><i class="fa fa-star{{ $i <= $product->rating ? '' : '-o' }}"></i></a></li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-star{{ $i <= round($product->reviews_avg_rating) ? '' : '-o' }}"></i>
+                                        </a>
+                                    </li>
                                 @endfor
-                                <li class="review"><a href="#"> ({{ $product->reviews_count }} reviews) </a></li>
+                                <li class="review">
+                                    <a href="#"> ({{ $product->reviews_count }} reviews) </a>
+                                </li>
                             </ul>
+
                         </div>
                         <div class="price_box">
                             <span class="current_price">${{ number_format($product->price, 2) }}</span>
@@ -105,7 +111,12 @@
                                 <div class="reviews_comment_box">  
                                     <div class="comment_thmb">  
                                         <!-- Example placeholder for user image, replace with real user image if available -->  
-                                        <img src="{{ asset('img/blog/comment2.jpg') }}" alt="User Avatar">  
+                                        
+                                        @if ($user->profile_pic)
+                                        <img src="{{ Storage::url($user->profile_pic) }}" alt="avatar" class="avatar-icon">
+                                        @else
+                                        <img src="{{ asset('img/blog/comment2.jpg') }}" alt="User Avatar">
+                                        @endif
                                     </div>  
                                     <div class="comment_text">  
                                         <div class="reviews_meta">  
@@ -186,4 +197,14 @@
         });
     });
 </script>
+<style>
+.avatar-icon {
+    width: 50px; /* Adjust size as needed */
+    height: 50px; /* Maintain aspect ratio */
+    border-radius: 50%; /* Makes it circular */
+    object-fit: cover; /* Ensures the image fits the circle */
+    border: 2px solid #ddd; /* Optional: Adds a border for aesthetics */
+}
+
+</style>
 @endsection

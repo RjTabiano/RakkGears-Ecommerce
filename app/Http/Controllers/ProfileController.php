@@ -13,6 +13,7 @@ class ProfileController extends Controller
         return view('editProfile', ['user' => Auth::user()]);
     }
 
+
     public function update(Request $request)
     {
         $request->validate([
@@ -29,8 +30,15 @@ class ProfileController extends Controller
             $user->password = Hash::make($request->password);
         }
 
+
+        if ($request->hasFile('profile_pic')) {
+            $imagePath = $request->file('profile_pic')->store('products', 'public');
+        } else {
+            $imagePath = null;
+        }
+        $user->profile_pic = $imagePath;
         $user->save();
 
-        return redirect()->route('editProfile')->with('success', 'Profile updated successfully!');
+        return redirect()->route('profile.edit')->with('success', 'Profile updated successfully!');
     }
 }

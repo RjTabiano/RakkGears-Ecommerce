@@ -29,7 +29,7 @@ Auth::routes();
 Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 
 Route::get('/editProfile', [ProfileController::class, 'edit'])->name('profile.edit');
-Route::get('/editProfile/update', [ProfileController::class, 'update'])->name('profile.update');
+Route::post('/editProfile/update', [ProfileController::class, 'update'])->name('profile.update');
 
 route::get('/tracking', [HomeController::class, 'tracking'])->name('tracking');
 route::get('/about', [HomeController::class, 'about'])->name('about');

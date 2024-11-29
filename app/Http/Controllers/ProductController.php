@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Product;
 
@@ -132,9 +133,16 @@ class ProductController extends Controller
 
     public function product_info($id)
     {
-        $product = Product::findOrFail($id);
-        return view('productDetails', compact('product'));
+        $user = Auth::user();
+
+        // Fetch product along with aggregated review data
+        $product = Product::withCount('reviews') // Counts reviews
+                        ->withAvg('reviews', 'rating') // Averages the rating
+                        ->findOrFail($id);
+
+        return view('productDetails', compact('product', 'user'));
     }
+
 
     
 }
