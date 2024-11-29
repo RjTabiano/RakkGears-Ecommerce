@@ -109,7 +109,9 @@ class CheckoutController extends Controller
         }
 
         // Redirect to the order confirmation page
-        return redirect()->route('order.confirmation', ['order' => $order->id]);
+        return redirect()->route('order.confirmation', ['order' => $order->id])
+                ->with('success', 'Your order has been placed successfully!');
+
     }
 
     public function cartConfirmation(Order $order)

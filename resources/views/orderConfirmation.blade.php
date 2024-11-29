@@ -47,6 +47,25 @@
     </div>                   
 
 </div>
+<div class="toast-container">
+    <div id="toastMessage" class="toast" style="position: fixed; bottom: 20px; right: 20px; max-width: 300px;">
+        <div class="toast-body" style="background-color: #EB3336; color: white; border-radius: 5px; border: 2px solid #EB3336;">
+            <!-- Success message will be injected here -->
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        @if(session('success'))
+            // Show the toast
+            const toastElement = document.getElementById('toastMessage');
+            const toast = new bootstrap.Toast(toastElement);
+            toastElement.querySelector('.toast-body').textContent = "{{ session('success') }}";
+            toast.show();
+        @endif
+    });
+</script>
 
 
 @endsection
