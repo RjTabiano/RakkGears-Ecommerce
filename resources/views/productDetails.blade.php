@@ -172,6 +172,20 @@
         </div>
     </div>
 </div>
+<!-- TOAST -->
+<div class="toast-container position-fixed bottom-0 right-0 p-3" style="z-index: 1050;">
+    <div id="toastMessage" class="toast custom-toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
+        <div class="toast-body">
+            <!-- Success message dynamically injected here -->
+            <strong>Success:</strong> Product added to cart!
+            <button type="button" class="close ml-3" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- END TOAST -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const stars = document.querySelectorAll('.rating-star');
@@ -197,6 +211,18 @@
         });
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        @if(session('success'))
+            // Show the toast
+            const toastElement = document.getElementById('toastMessage');
+            const toast = new bootstrap.Toast(toastElement);
+            toastElement.querySelector('.toast-body').textContent = "{{ session('success') }}";
+            toast.show();
+        @endif
+    });
+</script>
+
 <style>
 .avatar-icon {
     width: 50px; /* Adjust size as needed */
@@ -205,6 +231,5 @@
     object-fit: cover; /* Ensures the image fits the circle */
     border: 2px solid #ddd; /* Optional: Adds a border for aesthetics */
 }
-
 </style>
 @endsection
