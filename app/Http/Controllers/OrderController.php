@@ -78,5 +78,25 @@ class OrderController extends Controller
         return view('myOrder', compact('pendingOrders', 'processingOrders', 'completedOrders', 'cancelledOrders'));
     }
 
+    public function cancelOrder($orderId)
+    {
+        // Find the order by its ID and ensure it's pending
+        $order = Order::where('id', $orderId)
+                    ->where('status', 'pending')
+                    ->first();
+
+        // If the order doesn't exist or is not pending, show an error
+        if (!$order) {
+            return redirect()->route('my.orders')->with('error', 'Order not found or cannot be cancelled.');
+        }
+
+        // Update the order status to cancelled
+        $order->status = 'cancelled';
+        $order->save();
+
+        // Redirect back to the orders page with a success message
+        return redirect()->route('my.orders')->with('success', 'Order has been cancelled successfully.');
+    }
+
    
 }

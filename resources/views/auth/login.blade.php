@@ -24,7 +24,7 @@
 			<input type="text" name="name" placeholder="Username" required />
 
 			<input type="email"  name="email" placeholder="Email" required/>
-
+            
 			<input type="password" name="password" placeholder="Password" required />
 
             <input type="password" name="password_confirmation" placeholder="Confirm Password" required />
@@ -44,7 +44,7 @@
 			<span>or use your account</span>
 
 			<input type="email" name="email" placeholder="Email" required/>
-
+        
 			<input type="password" name="password" placeholder="Password" required/>
 
 			<a href="#">Forgot your password?</a>
@@ -67,6 +67,7 @@
 		</div>
 	</div>
 </div>
+<div id="toaster" class="toaster-container"></div>
 
 
 <script>
@@ -122,7 +123,7 @@
 
                 toaster.appendChild(toast);
 
-                setTimeout(() => hideToast(toast), 3000); // Hide toast after 3 seconds
+                setTimeout(() => hideToast(toast), 60000); // Hide toast after 3 seconds
             }
 
             function hideToast(toast) {

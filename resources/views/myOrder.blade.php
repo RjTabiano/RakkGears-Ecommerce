@@ -43,6 +43,7 @@
                                 <th>Status</th>
                                 <th>Total</th>
                                 <th>Date</th>
+                                <th>Action</th> <!-- New column for the action button -->
                             </tr>
                         </thead>
                         <tbody>
@@ -52,11 +53,20 @@
                                     <td>{{ ucfirst($order->status) }}</td>
                                     <td>₱{{ number_format($order->total_price, 2) }}</td>
                                     <td>{{ $order->created_at->format('Y-m-d') }}</td>
+                                    <td>
+                                        <!-- Add Cancel button -->
+                                        <form action="{{ route('order.cancel', $order->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel this order?');">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="btn btn-danger btn-sm">Cancel Order</button>
+                                        </form>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
+
 
                 <!-- To Receive Orders (Processing Orders) Tab -->
                 <div class="tab-pane fade" id="processing-orders" role="tabpanel" aria-labelledby="processing-orders-tab">

@@ -75,6 +75,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/my_orders', [OrderController::class, 'showUserOrder'])->name('my.orders');
+    Route::put('/order/{order}/cancel', [OrderController::class, 'cancelOrder'])->name('order.cancel');
 
 });
 
