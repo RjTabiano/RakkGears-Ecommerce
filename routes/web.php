@@ -69,7 +69,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/products/{id}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 
-    Route::get('/cart/{cart}', [CheckoutController::class, 'showOrder'])->name('checkout.show');
+    Route::get('/cart/{cart?}', [CheckoutController::class, 'showOrder'])->name('checkout.show');
     Route::post('/cart/checkout', [CheckoutController::class, 'storeOrder'])->name('checkout.store');
     Route::get('/cart//{order}/confirmation', [CheckoutController::class, 'cartConfirmation'])->name('order.confirmation');
 

@@ -135,13 +135,17 @@ class ProductController extends Controller
     {
         $user = Auth::user();
 
-        // Fetch product along with aggregated review data
-        $product = Product::withCount('reviews') // Counts reviews
+        // Fetch product with reviews and related user data
+        $product = Product::with(['reviews.user'])
+                        ->withCount('reviews') // Counts reviews
                         ->withAvg('reviews', 'rating') // Averages the rating
                         ->findOrFail($id);
-
+        
+        
+        
         return view('productDetails', compact('product', 'user'));
     }
+
 
 
     

@@ -18,13 +18,15 @@ class CheckoutController extends Controller
     }
 
 
-    public function showOrder(Cart $cart)
+    public function showOrder(Cart $cart = null)
     {
-        $this->authorize('view', $cart); 
+        if (!$cart) {
+            return redirect()->route('cart')->with('error', 'Cart not found. Please add items to your cart.');
+        }
+
+        $this->authorize('view', $cart);
 
         $cart->load('items.product');
-
-        
 
         return view('checkout', compact('cart'));
     }

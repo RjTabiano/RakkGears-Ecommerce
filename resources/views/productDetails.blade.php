@@ -108,32 +108,31 @@
                             <div class="reviews_wrapper">  
                                 <h2>{{ $product->reviews_count }} reviews for {{ $product->name }}</h2>  
                                 @foreach($product->reviews as $review)  
-                                <div class="reviews_comment_box">  
-                                    <div class="comment_thmb">  
-                                        <!-- Example placeholder for user image, replace with real user image if available -->  
-                                        
-                                        @if ($user->profile_pic)
-                                        <img src="{{ Storage::url($user->profile_pic) }}" alt="avatar" class="avatar-icon">
-                                        @else
-                                        <img src="{{ asset('img/blog/comment2.jpg') }}" alt="User Avatar">
-                                        @endif
-                                    </div>  
-                                    <div class="comment_text">  
-                                        <div class="reviews_meta">  
-                                            <div class="star_rating">  
-                                                <ul>  
-                                                    @for ($i = 1; $i <= 5; $i++)  
-                                                        <li>  
-                                                            <i class="ion-ios-star{{ $i <= $review->rating ? '' : '-outline' }}"></i>  
-                                                        </li>  
-                                                    @endfor  
-                                                </ul>  
+                                    <div class="reviews_comment_box">  
+                                        <div class="comment_thmb">  
+                                            <!-- Display the profile picture of the user who made the review -->
+                                            @if ($review->user && $review->user->profile_pic)
+                                                <img src="{{ Storage::url($review->user->profile_pic) }}" alt="{{ $review->user->name }}'s avatar" class="avatar-icon">
+                                            @else
+                                                <img src="{{ asset('img/blog/comment2.jpg') }}" alt="Default User Avatar">
+                                            @endif
+                                        </div>  
+                                        <div class="comment_text">  
+                                            <div class="reviews_meta">  
+                                                <div class="star_rating">  
+                                                    <ul>  
+                                                        @for ($i = 1; $i <= 5; $i++)  
+                                                            <li>  
+                                                                <i class="ion-ios-star{{ $i <= $review->rating ? '' : '-outline' }}"></i>  
+                                                            </li>  
+                                                        @endfor  
+                                                    </ul>  
+                                                </div>  
+                                                <p><strong>{{ $review->user->name ?? 'Anonymous' }}</strong> - {{ $review->created_at->format('F d, Y') }}</p>  
+                                                <span>{{ $review->review }}</span>  
                                             </div>  
-                                            <p><strong>{{ $review->user->name }}</strong> - {{ $review->created_at->format('F d, Y') }}</p>  
-                                            <span>{{ $review->review }}</span>  
                                         </div>  
                                     </div>  
-                                </div>  
                                 @endforeach  
                             </div>
                             <div class="comment_title">  
