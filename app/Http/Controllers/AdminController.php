@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\User;
 
 
 class AdminController extends Controller
@@ -33,4 +34,37 @@ class AdminController extends Controller
         ]);
     }
 
+
+    public function accounts(Request $request)
+    {
+        $usertype = $request->query('usertype');
+
+        $users = User::when($usertype, function ($query, $usertype) {
+            $query->where('usertype', $usertype);
+        })->paginate(10);
+
+        return view('admin_panel.accounts', [
+            'users' => $users,
+            'usertype' => $usertype,
+        ]);
+    }
+
+
+    public function makeAdmin($id)
+    {
+        $user = User::findOrFail($id);
+        $user->usertype = 'admin';
+        $user->save();
+
+        return redirect()->route('accounts')->with('success', 'User has been updated to admin.');
+    }
+
+    public function makeUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->usertype = 'user';
+        $user->save();
+
+        return redirect()->route('accounts')->with('success', 'User has been reverted to user.');
+    }
 }

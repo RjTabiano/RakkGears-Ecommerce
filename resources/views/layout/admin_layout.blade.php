@@ -68,6 +68,7 @@
                             <a href="{{route('add_products')}}" class="dropdown-item">Add Product</a>
                         </div>
                     </div>
+                    <a href="{{route('accounts')}}" class="nav-item nav-link"><i class="fa fa-shopping-cart me-2"></i>Accounts</a>
                     <a href="{{route('home')}}" class="nav-item nav-link"><i class="fa fa-home me-2"></i>Home</a>
                     
                 </div>

@@ -60,6 +60,10 @@ route::get('/add_products', [ProductController::class, 'add_products'])->middlew
 Route::get('/products/{id}/edit', [ProductController::class, 'edit_product'])->middleware(['auth', 'admin'])->name('product.edit');
 Route::put('/products/{id}', [ProductController::class, 'update_product'])->middleware(['auth', 'admin'])->name('product.update');
 Route::delete('/products/{id}', [ProductController::class, 'destroy_product'])->middleware(['auth', 'admin'])->name('product.destroy');
+route::get('/accounts', [AdminController::class, 'accounts'])->middleware(['auth', 'admin'])->name('accounts');
+Route::get('/users/{id}/make-admin', [AdminController::class, 'makeAdmin'])->middleware(['auth', 'admin'])->name('users.makeAdmin');
+Route::get('/users/{id}/make-user', [AdminController::class, 'makeUser'])->middleware(['auth', 'admin'])->name('users.makeUser');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/cart', [CartController::class, 'cart'])->name('cart');
