@@ -9,11 +9,6 @@ apt-get install -y nodejs
 echo "Running composer..."
 composer install --no-dev --working-dir=/var/www/html
 
-# Vite build
-echo "Installing npm dependencies..."
-cd /var/www/html
-npm ci
-npm run build
 
 # Laravel setup
 echo "Generating application key..."
