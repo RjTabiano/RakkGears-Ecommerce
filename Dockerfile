@@ -1,12 +1,13 @@
-# Stage 1: Build assets
+# Stage 1: Build assets with Node
 FROM node:18 AS node_builder
 WORKDIR /app
 COPY package*.json vite.config.js ./
 COPY resources ./resources
+COPY public ./public
 RUN npm install && npm run build
 
-# Stage 2: PHP/Laravel
-FROM php:8.2-fpm
+# Stage 2: Laravel + PHP
+FROM php:8.2-cli
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -16,7 +17,7 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     libzip-dev \
     zip \
-    && docker-php-ext-install pdo pdo_mysql pdo_pgsql zip
+    && docker-php-ext-install pdo pdo_mysql zip
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -26,10 +27,10 @@ WORKDIR /var/www/html
 # Copy Laravel code
 COPY . .
 
-# Copy built Vite assets
+# Copy built assets from node builder
 COPY --from=node_builder /app/public/build ./public/build
 
-# Install PHP dependencies
+# Install Laravel dependencies
 RUN composer install --optimize-autoloader --no-dev \
     && php artisan config:cache \
     && php artisan route:cache \
@@ -38,5 +39,5 @@ RUN composer install --optimize-autoloader --no-dev \
 # Expose port
 EXPOSE 8080
 
-# Start Laravel server
+# Run Laravel server
 CMD php artisan serve --host=0.0.0.0 --port=8080
