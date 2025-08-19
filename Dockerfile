@@ -30,11 +30,7 @@ COPY . .
 # Copy built assets from node builder
 COPY --from=node_builder /app/public/build ./public/build
 
-# Install Laravel dependencies
-RUN composer install --optimize-autoloader --no-dev \
-    && php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache
+RUN composer install --optimize-autoloader --no-dev
 
 # Expose port
 EXPOSE 8080
