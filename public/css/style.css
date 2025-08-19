@@ -5946,7 +5946,17 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 
 /* 15. product details css here */
 #img-1 {
-  border: 1px solid #ebebeb;
+  justify-content: center;
+}
+
+.product-details-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centers the image + thumbnails horizontally */
+}
+.product-details-tab img {
+  max-width: 100%; /* keeps it responsive */
+  height: auto;
 }
 
 .header_product {

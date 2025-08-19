@@ -63,7 +63,7 @@
 							<div class="col-md-4 col-xs-6">
 								<div class="product">
 									<div class="product-img">
-										<img src="{{ Storage::url($product->image_path) }}" alt="">
+										<img src="{{ $product->image_path }}" alt="{{ $product->name }}">
 										
 									</div>
 									<div class="product-body">

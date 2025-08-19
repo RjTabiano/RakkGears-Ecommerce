@@ -28,8 +28,7 @@ Route::get('/', [HomeController::class, 'home'])->name('home');
 Auth::routes();
 Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 
-Route::get('/editProfile', [ProfileController::class, 'edit'])->name('profile.edit');
-Route::post('/editProfile/update', [ProfileController::class, 'update'])->name('profile.update');
+
 
 route::get('/tracking', [HomeController::class, 'tracking'])->name('tracking');
 route::get('/about', [HomeController::class, 'about'])->name('about');
@@ -66,6 +65,8 @@ Route::get('/users/{id}/make-user', [AdminController::class, 'makeUser'])->middl
 
 
 Route::middleware('auth')->group(function () {
+    Route::get('/editProfile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/editProfile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/cart', [CartController::class, 'cart'])->name('cart');
     Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
     Route::put('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');

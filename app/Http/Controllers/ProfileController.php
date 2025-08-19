@@ -13,6 +13,33 @@ class ProfileController extends Controller
         return view('editProfile', ['user' => Auth::user()]);
     }
 
+    function uploadToSupabase($file, $bucket = 'Rakk') 
+    {
+        $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+
+        $client = new \GuzzleHttp\Client([
+            'base_uri' => env('SUPABASE_URL') . '/storage/v1/',
+            'headers' => [
+                'Authorization' => 'Bearer ' . env('SUPABASE_ANON_KEY'),
+                'apikey'        => env('SUPABASE_ANON_KEY'),
+            ]
+        ]);
+
+        $response = $client->post("object/$bucket/profile/$fileName", [
+            'headers' => [
+                'x-upsert' => 'true',
+                'Content-Type' => $file->getMimeType(),
+            ],
+            'body' => file_get_contents($file->getRealPath())
+        ]);
+
+        if ($response->getStatusCode() !== 200) {
+            throw new \Exception("Upload failed: " . $response->getBody());
+        }
+
+        return env('SUPABASE_URL') . "/storage/v1/object/public/$bucket/profile/$fileName";
+    }
+
 
     public function update(Request $request)
     {
@@ -32,7 +59,7 @@ class ProfileController extends Controller
 
 
         if ($request->hasFile('profile_pic')) {
-            $imagePath = $request->file('profile_pic')->store('products', 'public');
+            $imagePath = $this->uploadToSupabase($request->file('profile_pic'));
         } else {
             $imagePath = null;
         }

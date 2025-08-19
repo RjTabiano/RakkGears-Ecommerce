@@ -76,5 +76,11 @@
             @yield('content')
         </main>
     </div>
+
+    <script>
+        document.querySelector('form[action*="logout"]').addEventListener('submit', function() {
+            window.dispatchEvent(new Event('userLoggedOut'));
+        });
+    </script>
 </body>
 </html>

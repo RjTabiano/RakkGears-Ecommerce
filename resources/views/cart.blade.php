@@ -34,7 +34,7 @@
                                             <tr>
                                                 <td class="product_thumb">
                                                     <a href="#">
-                                                        <img src="{{ Storage::url($item->product->image_path) }}" alt="{{ $item->product->name }}">
+                                                        <img src="{{ $item->product->image_path }}" alt="{{ $item->product->name }}">
                                                     </a>
                                                 </td>
                                                 <td class="product_name">

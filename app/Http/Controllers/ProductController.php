@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Product;
-
+use GuzzleHttp\Client;
 
 
 class ProductController extends Controller
@@ -38,6 +38,49 @@ class ProductController extends Controller
         return view('admin_panel.addProducts');
     }
 
+    function uploadToSupabase($file, $bucket = 'Rakk') 
+    {
+        $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+
+        $client = new \GuzzleHttp\Client([
+            'base_uri' => env('SUPABASE_URL') . '/storage/v1/',
+            'headers' => [
+                'Authorization' => 'Bearer ' . env('SUPABASE_ANON_KEY'),
+                'apikey'        => env('SUPABASE_ANON_KEY'),
+            ]
+        ]);
+
+        // Upload
+        $response = $client->post("object/$bucket/products/$fileName", [
+            'headers' => [
+                'x-upsert' => 'true',
+                'Content-Type' => $file->getMimeType(),
+            ],
+            'body' => file_get_contents($file->getRealPath())
+        ]);
+
+        if ($response->getStatusCode() !== 200) {
+            throw new \Exception("Upload failed: " . $response->getBody());
+        }
+
+        // Since it's public, URL is predictable:
+        return env('SUPABASE_URL') . "/storage/v1/object/public/$bucket/products/$fileName";
+    }
+
+    private function deleteFromSupabase($fileUrl, $bucket = 'products')
+    {
+        $fileName = basename($fileUrl);
+
+        $client = new \GuzzleHttp\Client([
+            'base_uri' => env('SUPABASE_URL') . '/storage/v1/',
+            'headers' => [
+                'Authorization' => 'Bearer ' . env('SUPABASE_SERVICE_ROLE_KEY'),
+                'apikey' => env('SUPABASE_SERVICE_ROLE_KEY'),
+            ]
+        ]);
+
+        $client->delete("object/$bucket/$fileName");
+    }
 
     public function store_product(Request $request)
     {
@@ -47,12 +90,13 @@ class ProductController extends Controller
             'category' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'stock_quantity' => 'required|integer|min:0',
+            'image_path' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
+        $imageUrl = null;
+
         if ($request->hasFile('image_path')) {
-            $imagePath = $request->file('image_path')->store('products', 'public');
-        } else {
-            $imagePath = null;
+            $imageUrl = $this->uploadToSupabase($request->file('image_path'));
         }
 
         Product::create([
@@ -61,7 +105,7 @@ class ProductController extends Controller
             'category' => $request->category,
             'price' => $request->price,
             'stock_quantity' => $request->stock_quantity,
-            'image_path' => $imagePath,
+            'image_path' => $imageUrl,
         ]);
 
         return redirect()->route('add_products')->with('success', 'Product added successfully');
@@ -87,14 +131,14 @@ class ProductController extends Controller
 
         $product = Product::findOrFail($id); 
 
+        $imageUrl = $product->image_path;
+
         if ($request->hasFile('image_path')) {
             if ($product->image_path) {
-                Storage::disk('public')->delete($product->image_path);
+                $this->deleteFromSupabase($product->image_path);
             }
 
-            $imagePath = $request->file('image_path')->store('products', 'public');
-        } else {
-            $imagePath = $product->image_path; 
+            $imageUrl = $this->uploadToSupabase($request->file('image_path'));
         }
 
         $product->update([

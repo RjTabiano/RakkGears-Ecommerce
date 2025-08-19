@@ -145,7 +145,7 @@
 
                 const productImage = document.getElementById('productImage');
                 if (data.image_path) {
-                    productImage.src = `/storage/${data.image_path}`;
+                    productImage.src = `${data.image_path}`;
                     productImage.alt = `${data.name} Image`;
                 } else {
                     productImage.src = 'https://via.placeholder.com/300?text=No+Image';

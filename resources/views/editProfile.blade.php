@@ -17,7 +17,7 @@
                     <!-- Profile Picture Upload -->
                     <div class="col-md-3 text-center">
                         @if ($user->profile_pic)
-                        <img src="{{ Storage::url($user->profile_pic) }}" 
+                        <img src="{{ $user->profile_pic }}" 
                              class="avatar img-circle mb-3" alt="avatar">
                         @else
                         <img src="https://png.pngitem.com/pimgs/s/150-1503945_transparent-user-png-default-user-image-png-png.png" 

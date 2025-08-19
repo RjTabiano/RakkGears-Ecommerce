@@ -21,6 +21,7 @@
                     </div>
                 </div>
             </div>
+        </div>
     </section>
     <!--slider area end-->
 
@@ -394,7 +395,7 @@
 <script src="{{ asset('js/V2/jquery.zoom.min.js') }}"></script>
 
 <script src="{{ asset('js/V2/main.js') }}"></script>
-
+<script src="{{ asset('js/chat-widget.js') }}"></script>
 
 @endsection
 @endsection

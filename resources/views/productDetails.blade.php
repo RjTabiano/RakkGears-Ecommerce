@@ -8,10 +8,10 @@
         <div class="row">
             <div class="col-lg-6 col-md-6">
                 <div class="product-details-tab">
-                    <div id="img-1" class="zoomWrapper single-zoom">
+                    <div id="img-1" class="">
                         <a href="#">
                             <!-- Use the product image from the database -->
-                            <img id="zoom1" src="{{ asset('public/storage/' . $product->image_path) }}" data-zoom-image="{{ Storage::url($product->image_path) }}" alt="big-1">
+                            <img id="zoom1" src="{{ $product->image_path }}" data-zoom-image="{{ $product->image_path }}" alt="big-1">
                         </a>
                     </div>
                     <div class="single-zoom-thumb">
@@ -112,7 +112,7 @@
                                         <div class="comment_thmb">  
                                             <!-- Display the profile picture of the user who made the review -->
                                             @if ($review->user && $review->user->profile_pic)
-                                                <img src="{{ Storage::url($review->user->profile_pic) }}" alt="{{ $review->user->name }}'s avatar" class="avatar-icon">
+                                                <img src="{{ $review->user->profile_pic }}" alt="{{ $review->user->name }}'s avatar" class="avatar-icon">
                                             @else
                                                 <img src="{{ asset('img/blog/comment2.jpg') }}" alt="Default User Avatar">
                                             @endif
