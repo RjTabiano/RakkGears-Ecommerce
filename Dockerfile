@@ -5,7 +5,7 @@ COPY package*.json ./
 COPY vite.config.js ./
 COPY resources ./resources
 COPY public ./public
-RUN npm ci --only=production && npm run build
+RUN npm ci && npm run build
 
 FROM php:8.2-fpm-alpine
 
