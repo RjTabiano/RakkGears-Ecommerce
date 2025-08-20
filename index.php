@@ -3,6 +3,12 @@
  * Laravel Application Entry Point for Azure App Service
  */
 
+// Show route test if requested
+if (isset($_GET['route_test'])) {
+    include __DIR__ . '/route_test.php';
+    exit;
+}
+
 // Show test page if requested
 if (isset($_GET['test'])) {
     include __DIR__ . '/test.php';
@@ -12,6 +18,17 @@ if (isset($_GET['test'])) {
 // Show debug page if requested
 if (isset($_GET['debug'])) {
     include __DIR__ . '/debug.php';
+    exit;
+}
+
+// Clear Laravel caches if requested
+if (isset($_GET['clear'])) {
+    exec('cd ' . __DIR__ . ' && php artisan cache:clear 2>&1', $output);
+    exec('cd ' . __DIR__ . ' && php artisan route:clear 2>&1', $output2);
+    exec('cd ' . __DIR__ . ' && php artisan config:clear 2>&1', $output3);
+    echo "<h1>Caches Cleared!</h1>";
+    echo "<pre>" . implode("\n", array_merge($output, $output2, $output3)) . "</pre>";
+    echo "<p><a href='/'>Go to Home</a> | <a href='/about'>Test About</a></p>";
     exit;
 }
 
@@ -56,6 +73,10 @@ if (strpos($requestUri, '/index.php') === 0) {
     $requestUri = substr($requestUri, 10) ?: '/';
     $_SERVER['REQUEST_URI'] = $requestUri;
 }
+
+// Set PATH_INFO for proper routing
+$pathInfo = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$_SERVER['PATH_INFO'] = $pathInfo;
 
 try {
     // Load Laravel
