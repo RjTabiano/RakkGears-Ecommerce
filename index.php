@@ -10,9 +10,9 @@ if (file_exists(__DIR__ . '/public/index.php')) {
     // Get the current URI
     $uri = $_SERVER['REQUEST_URI'];
     
-    // If we're at the root, redirect to public
+    // If we're at the root, load Laravel via bootstrap
     if ($uri === '/' || $uri === '/index.php') {
-        header('Location: /public/');
+        require_once __DIR__ . '/azure-bootstrap.php';
         exit;
     }
     
