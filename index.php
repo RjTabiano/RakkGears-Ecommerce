@@ -10,17 +10,23 @@ if (file_exists(__DIR__ . '/public/index.php')) {
     // Get the current URI
     $uri = $_SERVER['REQUEST_URI'];
     
-    // If we're at the root, load Laravel via bootstrap
-    if ($uri === '/' || $uri === '/index.php') {
-        require_once __DIR__ . '/azure-bootstrap.php';
-        exit;
-    }
+    // Remove query string for route matching
+    $path = parse_url($uri, PHP_URL_PATH);
     
-    // For other requests, redirect to public with the path
-    if (strpos($uri, '/public/') !== 0) {
+    // Handle static assets - redirect to public folder
+    if (preg_match('/\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/i', $path)) {
         header('Location: /public' . $uri);
         exit;
     }
+    
+    // Handle all other requests through Laravel
+    // Set up the request for Laravel
+    $_SERVER['SCRIPT_NAME'] = '/index.php';
+    $_SERVER['SCRIPT_FILENAME'] = __DIR__ . '/index.php';
+    
+    // Load Laravel
+    require_once __DIR__ . '/azure-bootstrap.php';
+    exit;
 }
 
 // If we get here, show an error

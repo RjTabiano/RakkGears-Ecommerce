@@ -26,6 +26,25 @@ foreach ($dirs as $dir) {
     @chmod($dir, 0755);
 }
 
+// Fix the request URI for Laravel routing
+$requestUri = $_SERVER['REQUEST_URI'];
+
+// Remove /index.php from the URI if present
+if (strpos($requestUri, '/index.php') === 0) {
+    $requestUri = substr($requestUri, 10); // Remove '/index.php'
+    if (empty($requestUri)) {
+        $requestUri = '/';
+    }
+}
+
+// Update server variables for Laravel
+$_SERVER['REQUEST_URI'] = $requestUri;
+$_SERVER['SCRIPT_NAME'] = '/public/index.php';
+$_SERVER['SCRIPT_FILENAME'] = __DIR__ . '/public/index.php';
+
+// Set document root to public folder
+$_SERVER['DOCUMENT_ROOT'] = __DIR__ . '/public';
+
 // Now load Laravel
 require_once __DIR__ . '/public/index.php';
 ?>
