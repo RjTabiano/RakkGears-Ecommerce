@@ -3,6 +3,12 @@
  * Laravel Application Entry Point for Azure App Service
  */
 
+// Show direct test if requested
+if (isset($_GET['direct'])) {
+    include __DIR__ . '/direct_test.php';
+    exit;
+}
+
 // Show route test if requested
 if (isset($_GET['route_test'])) {
     include __DIR__ . '/route_test.php';
