@@ -1,11 +1,10 @@
 #!/bin/bash
 
-# Create required directories
-mkdir -p /var/run/php
-mkdir -p /var/log/nginx
-
 # Set permissions
 chmod 755 /home/site/wwwroot/init_container.sh
+
+# Change to Laravel directory
+cd /home/site/wwwroot
 
 # Copy Laravel .env if it doesn't exist
 if [ ! -f /home/site/wwwroot/.env ]; then
@@ -13,19 +12,18 @@ if [ ! -f /home/site/wwwroot/.env ]; then
 fi
 
 # Generate Laravel key if needed
-cd /home/site/wwwroot
 php artisan key:generate --force || echo "Could not generate key"
 
-# Run Laravel optimizations
+# Clear any existing caches
+php artisan config:clear || echo "Config clear failed"
+php artisan route:clear || echo "Route clear failed"
+php artisan cache:clear || echo "Cache clear failed"
+
+# Cache configurations for production
 php artisan config:cache || echo "Config cache failed"
-php artisan route:cache || echo "Route cache failed"
-php artisan view:cache || echo "View cache failed"
 
-# Start PHP-FPM
-php-fpm -y /home/site/wwwroot/php-fpm.conf -D
-
-# Wait for PHP-FPM to start
-sleep 3
+# Check if nginx is already running and stop it
+pkill nginx || echo "No existing nginx processes"
 
 # Start Nginx in the foreground
 exec nginx -c /home/site/wwwroot/nginx.conf -g "daemon off;"
