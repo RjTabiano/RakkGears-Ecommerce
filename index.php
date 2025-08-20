@@ -1,6 +1,7 @@
 <?php
 /**
  * Laravel Application Entry Point for Azure App Service
+ * This file works around Azure's default nginx configuration
  */
 
 // Show direct test if requested
@@ -53,12 +54,7 @@ foreach ($dirs as $dir) {
     }
 }
 
-// Check if we have Laravel
-if (!file_exists(__DIR__ . '/public/index.php') || !file_exists(__DIR__ . '/bootstrap/app.php')) {
-    die('Laravel application not found. Missing files.');
-}
-
-// Get the request URI and clean it
+// Get current request info
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
 $path = parse_url($requestUri, PHP_URL_PATH);
 
@@ -69,23 +65,34 @@ if (preg_match('/\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|map)$/i',
     exit;
 }
 
-// Set up environment for Laravel
+// Since Azure nginx doesn't have proper try_files, we need to handle routing in PHP
+// Check if the request is for a Laravel route
+
+// Backup original server variables
+$originalRequestUri = $_SERVER['REQUEST_URI'];
+$originalScriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+
+// Set up Laravel environment properly
 $_SERVER['SCRIPT_NAME'] = '/index.php';
 $_SERVER['SCRIPT_FILENAME'] = __DIR__ . '/public/index.php';
 $_SERVER['DOCUMENT_ROOT'] = __DIR__ . '/public';
 
-// For Laravel routing, we need to ensure the REQUEST_URI is passed correctly
-// Do NOT modify REQUEST_URI if it's already correct
-if (!str_starts_with($requestUri, '/index.php') && $requestUri !== '/') {
-    // Keep the original URI for Laravel to route properly
-    $_SERVER['PATH_INFO'] = $path;
+// The key fix: Set the REQUEST_URI correctly for Laravel
+// Laravel expects the path without /index.php prefix
+if ($path !== '/') {
+    $_SERVER['REQUEST_URI'] = $path . (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] ? '?' . $_SERVER['QUERY_STRING'] : '');
 }
 
 try {
-    // Load Laravel
+    // Load Laravel's public/index.php which contains the actual application bootstrap
     require __DIR__ . '/public/index.php';
 } catch (Exception $e) {
+    // Restore original values in case of error
+    $_SERVER['REQUEST_URI'] = $originalRequestUri;
+    $_SERVER['SCRIPT_NAME'] = $originalScriptName;
+    
     echo "Laravel Error: " . $e->getMessage();
-    echo "<br><a href='?test=1'>Run Tests</a> | <a href='?debug=1'>Show Debug</a>";
+    echo "<br><br><a href='?test=1'>Run Tests</a> | <a href='?debug=1'>Show Debug</a> | <a href='?direct=1'>Direct Test</a>";
 }
+?>
 ?>
