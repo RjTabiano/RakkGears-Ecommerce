@@ -36,7 +36,6 @@ jobs:
       - name: Set directory permissions
         run: |
           chmod -R 755 storage bootstrap/cache
-          chmod +x init_container.sh
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
