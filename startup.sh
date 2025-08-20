@@ -38,27 +38,59 @@ echo "Checking PHP-FPM configuration..."
 ls -la /var/run/php* 2>/dev/null || echo "No /var/run/php sockets found"
 netstat -ln | grep :9000 || echo "No service on port 9000"
 
+# Get container IP addresses
+echo "Container network configuration:"
+ip addr show | grep inet || echo "IP address check failed"
+
 # Start PHP-FPM if not running
 php-fpm -D 2>/dev/null || echo "PHP-FPM start failed or already running"
 
 # Wait a moment for PHP-FPM to start
 sleep 2
 
-# Check again
-ls -la /var/run/php* 2>/dev/null || echo "Still no PHP-FPM sockets"
-netstat -ln | grep :9000 || echo "PHP-FPM status:"
+# Check again and get detailed info
+echo "PHP-FPM status after start:"
 netstat -ln | grep :9000
+ps aux | grep php-fpm | head -3
+
+# Test PHP-FPM connectivity
+echo "Testing PHP-FPM connectivity..."
+echo "Testing IPv4 localhost:"
+nc -z 127.0.0.1 9000 && echo "✅ IPv4 localhost works" || echo "❌ IPv4 localhost failed"
+echo "Testing IPv6 localhost:"
+nc -z ::1 9000 && echo "✅ IPv6 localhost works" || echo "❌ IPv6 localhost failed"
 
 # Stop any existing nginx
 pkill nginx || true
 
-# Test nginx config first
-nginx -t -c /home/site/wwwroot/nginx.conf || echo "Nginx config test failed"
+# Intelligent nginx configuration selection
+echo "Selecting optimal nginx configuration..."
 
-# Start nginx with our custom configuration
-nginx -c /home/site/wwwroot/nginx.conf -g "daemon off;" &
+# Check PHP-FPM connectivity and choose config accordingly
+if nc -z 127.0.0.1 9000; then
+    echo "✅ Using standard config - IPv4 connectivity works"
+    NGINX_CONFIG="/home/site/wwwroot/nginx.conf"
+elif nc -z ::1 9000; then
+    echo "⚠️ Using IPv6 config - only IPv6 connectivity works"
+    sed 's/127\.0\.0\.1:9000/[::1]:9000/' /home/site/wwwroot/nginx.conf > /tmp/nginx-ipv6.conf
+    NGINX_CONFIG="/tmp/nginx-ipv6.conf"
+elif [ -S /var/run/php/php-fpm.sock ] || [ -S /var/run/php-fpm.sock ]; then
+    echo "🔧 Using socket config - TCP ports not working"
+    # Use socket-based connection
+    sed 's/fastcgi_pass 127\.0\.0\.1:9000;/fastcgi_pass unix:\/var\/run\/php\/php-fpm.sock;/' /home/site/wwwroot/nginx-fallback.conf > /tmp/nginx-socket.conf
+    NGINX_CONFIG="/tmp/nginx-socket.conf"
+else
+    echo "⚡ Using fallback config with upstream"
+    NGINX_CONFIG="/home/site/wwwroot/nginx-fallback.conf"
+fi
 
-echo "Nginx started with custom Laravel configuration"
+# Test the selected config
+nginx -t -c "$NGINX_CONFIG" || echo "Warning: Nginx config test failed"
+
+# Start nginx with the selected configuration
+nginx -c "$NGINX_CONFIG" -g "daemon off;" &
+
+echo "Nginx started with configuration: $NGINX_CONFIG"
 
 # Keep the script running
 wait
