@@ -68,15 +68,12 @@ $_SERVER['SCRIPT_NAME'] = '/index.php';
 $_SERVER['SCRIPT_FILENAME'] = __DIR__ . '/public/index.php';
 $_SERVER['DOCUMENT_ROOT'] = __DIR__ . '/public';
 
-// Clean the request URI for Laravel
-if (strpos($requestUri, '/index.php') === 0) {
-    $requestUri = substr($requestUri, 10) ?: '/';
-    $_SERVER['REQUEST_URI'] = $requestUri;
+// For Laravel routing, we need to ensure the REQUEST_URI is passed correctly
+// Do NOT modify REQUEST_URI if it's already correct
+if (!str_starts_with($requestUri, '/index.php') && $requestUri !== '/') {
+    // Keep the original URI for Laravel to route properly
+    $_SERVER['PATH_INFO'] = $path;
 }
-
-// Set PATH_INFO for proper routing
-$pathInfo = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$_SERVER['PATH_INFO'] = $pathInfo;
 
 try {
     // Load Laravel
