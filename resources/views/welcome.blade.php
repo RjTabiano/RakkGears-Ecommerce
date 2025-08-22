@@ -395,7 +395,7 @@
 <script src="{{ asset('js/V2/jquery.zoom.min.js') }}"></script>
 
 <script src="{{ asset('js/V2/main.js') }}"></script>
-<script src="{{ asset('js/chat-widget.js') }}"></script>
+<script type="module" src="{{ asset('js/chat-widget-modular.js') }}"></script>
 
 @endsection
 @endsection
