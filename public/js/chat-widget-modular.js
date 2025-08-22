@@ -1,25 +1,16 @@
-/**
- * RAKK Gears AI Chat Widget - Modular Architecture
- * Main integration file that initializes the chat widget
- * This replaces the monolithic chat-widget.js file
- */
 import { ChatWidget } from './chat/ChatWidget.js';
 
-// Initialize chat widget when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
-    // Configuration for the chat widget
     const chatConfig = {
-        baseURL: 'http://127.0.0.1:8000',
+        baseURL: 'https://rakk-rag-chatbot-gte6d4dhhphrcff2.southeastasia-01.azurewebsites.net',
         timeout: 30000,
-        sessionTimeout: 30 * 60 * 1000, // 30 minutes
+        sessionTimeout: 30 * 60 * 1000, 
         welcomeMessage: "Hello! I'm your RAKK assistant. How can I help you find the perfect gaming gear today?"
     };
 
-    // Initialize the chat widget
     const rakkChat = new ChatWidget(chatConfig);
     rakkChat.init();
 
-    // Make it globally accessible for debugging (optional)
     window.rakkChat = rakkChat;
 });
 

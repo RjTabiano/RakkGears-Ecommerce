@@ -107,9 +107,16 @@ export class MessageManager {
      * Add products display
      */
     addProducts(products) {
+        console.log('MessageManager.addProducts called with:', products);
+        
         const messagesContainer = document.getElementById('rakk-chat-messages');
         
-        if (!products || products.length === 0 || !messagesContainer) return;
+        if (!products || products.length === 0 || !messagesContainer) {
+            console.log('MessageManager.addProducts: No products or messages container not found');
+            return;
+        }
+        
+        console.log('Creating product display for', products.length, 'products');
         
         const headerDiv = this.createProductHeader(products.length);
         const productsContainer = this.createProductsGrid(products);
@@ -143,7 +150,7 @@ export class MessageManager {
      */
     createProductsGrid(products) {
         const productsContainer = document.createElement('div');
-        productsContainer.className = 'rakk-product-grid';
+        productsContainer.className = 'rakk-products-grid';
         productsContainer.style.cssText = `
             margin: 12px 0;
             animation: fadeIn 0.5s ease;
@@ -161,20 +168,22 @@ export class MessageManager {
      * Create individual product card
      */
     createProductCard(product, index) {
+        console.log('Creating product card for:', product);
+        
         const productCard = document.createElement('div');
         productCard.className = 'rakk-product-card';
         productCard.style.animationDelay = `${index * 0.1}s`;
 
         productCard.innerHTML = `
             <img 
-                src="${this.escapeHtml(product.image_path)}" 
+                src="${this.escapeHtml(product.image)}" 
                 alt="${this.escapeHtml(product.name)}" 
                 class="rakk-product-image"
                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='"
             >
-            <h4 class="rakk-product-title">${this.escapeHtml(product.name)}</h4>
+            <h4 class="rakk-product-name">${this.escapeHtml(product.name)}</h4>
             <p class="rakk-product-description">${this.escapeHtml(product.description || 'No description available')}</p>
-            <div class="rakk-product-price">$${parseFloat(product.price).toFixed(2)}</div>
+            <div class="rakk-product-price">₱${parseFloat(product.price).toFixed(2)}</div>
             <a href="${this.escapeHtml(product.link)}" target="_blank" class="rakk-product-button">
                 View Product →
             </a>
@@ -203,9 +212,6 @@ export class MessageManager {
             <div style="font-weight: 600; color: #2c3e50; margin-bottom: 8px;">👋 Welcome to RakkGears!</div>
             <div style="color: #666; font-size: 14px; line-height: 1.4;">
                 I'm here to help you find the perfect gear. Ask me about products, specifications, or anything else!
-            </div>
-            <div style="margin-top: 8px; font-size: 12px; color: #999;">
-                Session ID: ${sessionId}
             </div>
         `;
         messagesContainer.appendChild(welcomeMessage);
